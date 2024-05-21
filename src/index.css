@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "TildaSans", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -13,7 +13,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-*, *::after::before {
+*,
+*::after::before {
   box-sizing: border-box;
 }
 
@@ -25,6 +26,12 @@ body {
   align-items: center;
   background-image: linear-gradient(to top, pink, purple);
 }
+
+.container {
+  backdrop-filter: blur(19px) saturate(180%);
+  border-radius: 12px;
+}
+
 
 /* Chat body */
 .chat {

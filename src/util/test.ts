@@ -2,8 +2,8 @@ export const testUserProps = [
     {
         id: '1',
         name: 'John Silver',
-        pfp: '/emo-user.jpg'
+        pfp: '/user-pfp.png'
     },
-    {id: '2', name: 'Carl Sagan', pfp: '/emo-user.jpg'},
-    {id: '3', name: 'Johny Sins'}
+    {id: '2', name: 'Carl Sagan', pfp: '/user-pfp.png'},
+    {id: '3', name: 'Johny Sins', pfp: '/user-pfp.png'}
 ]
