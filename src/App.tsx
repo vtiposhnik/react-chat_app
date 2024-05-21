@@ -7,11 +7,16 @@ const routesSignedIn = (
       <Route path='/' element={<HomePage />} />
   </Routes>
 )
+const unauthorized = (
+  <Routes>
+      <Route path='/' element={<AuthPage />} />
+  </Routes>
+)
 
 function App() {
-  const currentUser = 'exists'
+  const currentUser = null;
 
-  return currentUser ? routesSignedIn : (<AuthPage />)
+  return currentUser ? routesSignedIn : unauthorized
 }
 
 export default App

@@ -7,7 +7,7 @@ export default function HomePage() {
     const [detailsClicked, setDetailsClicked] = useState(true)
 
     return (
-        <main className='container h-[90vh] w-[90vw] bg-slate-200'>
+        <main className='rounded-lg h-[90vh] w-[90vw] bg-slate-200'>
             <section className=' flex'>
                 <ChatList />
                 <Chat handleClick={() => { setDetailsClicked((prev) => !prev) }} />

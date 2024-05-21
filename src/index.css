@@ -27,12 +27,6 @@ body {
   background-image: linear-gradient(to top, pink, purple);
 }
 
-.container {
-  backdrop-filter: blur(19px) saturate(180%);
-  border-radius: 12px;
-}
-
-
 /* Chat body */
 .chat {
   min-height: 90vh;
