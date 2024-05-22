@@ -1,8 +1,11 @@
+import { HiLogout } from "react-icons/hi"
 import { testUserProps } from "../util/test"
 import { HiOutlineCog } from "react-icons/hi2"
+import { auth } from "../firebase/firebase"
+import { Link } from "react-router-dom"
 
 export default function ChatList() {
-
+    
     return (
         <aside className="flex-[1] border-r-2 border-white">
             <div className="flex flex-col gap-4">
@@ -12,7 +15,8 @@ export default function ChatList() {
                         <img src={testUserProps[0].pfp} alt="user-pfp" className="size-[40px] rounded-full" />
                         <span>{testUserProps[0].name}</span>
                     </div>
-                    <button><HiOutlineCog size={25} /></button>
+                    <Link to='/settings'><HiOutlineCog size={25} /></Link>
+                    <button onClick={() => auth.signOut()}><HiLogout size={25} /></button>
                 </div>
 
                 <div className="flex items-center px-4 py-2 border-b-2 border-white">
