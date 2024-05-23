@@ -41,6 +41,9 @@ export default function AuthPage() {
                 email,
                 id: res.user.uid
             });
+            await setDoc(doc(db, "userChats", res.user.uid), {
+                chats: []
+            })
             toast.success("Account created successfully!")
 
         } catch (error: unknown) {
