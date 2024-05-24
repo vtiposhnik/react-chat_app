@@ -3,29 +3,24 @@ import { testUserProps } from "../../util/test"
 import { HiOutlineCog, HiOutlineUserPlus } from "react-icons/hi2"
 import { auth, db } from "../../firebase/firebase"
 import { Link } from "react-router-dom"
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { arrayUnion, collection, doc, getDoc, onSnapshot, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { useEffect, useState } from "react"
 import { useUserStore } from "../../zustand/userStore"
 import { User } from "../../util/interfaces"
 import { Modal, Button } from "flowbite-react"
-
-interface Chat {
-    userId: string,
-    chatId: string,
-    lastMessage: string,
-    user: User
-}
+import { userChat } from "../../util/interfaces"
+import { useChatStore } from "../../zustand/chatStore"
 
 export default function ChatList() {
-    const [chats, setChats] = useState<Chat[]>([])
+    const [chats, setChats] = useState<userChat[]>([])
     const [users, setUsers] = useState<User[]>([])
     const { currentUser, fetchUsers } = useUserStore()
+    const { setCurrentChat } = useChatStore()
 
     const [openModal, setOpenModal] = useState(false)
 
     useEffect(() => {
         fetchUsers().then((users) => {
-            console.log(users, "CHAT LIST")
             setUsers(users)
         })
     }, [])
@@ -37,8 +32,8 @@ export default function ChatList() {
                     if (res.exists()) {
                         const items = res.data().chats
 
-                        const promises = items.map(async (chat: Chat) => {
-                            const userDocRef = doc(db, "users", chat.userId)
+                        const promises = items.map(async (chat: userChat) => {
+                            const userDocRef = doc(db, "users", chat.partnerId)
                             const userDocSnap = await getDoc(userDocRef)
 
                             const user = userDocSnap.data()
@@ -47,6 +42,7 @@ export default function ChatList() {
                         })
                         Promise.all(promises)
                             .then((data) => {
+                                console.log(data)
                                 setChats(data)
                             })
                             .catch((error) => {
@@ -64,7 +60,39 @@ export default function ChatList() {
         }
     }, [currentUser!.id]);
 
-    console.log(users)
+    const handleChatAdd = async (userId: string) => {
+        const chatRef = collection(db, 'chats')
+        const userChatsRef = collection(db, 'userChats')
+
+        if (!currentUser) return
+
+        try {
+            const newChatRef = doc(chatRef)
+
+            await setDoc(newChatRef, {
+                chatId: currentUser.id,
+                messages: [],
+                createdAt: serverTimestamp()
+            });
+            await updateDoc(doc(userChatsRef, currentUser.id), {
+                chats: arrayUnion({
+                    chatId: newChatRef.id,
+                    lastMessage: "",
+                    partnerId: userId
+                })
+            })
+            await updateDoc(doc(userChatsRef, userId), {
+                chats: arrayUnion({
+                    chatId: newChatRef.id,
+                    lastMessage: "",
+                    partnerId: currentUser.id
+                })
+            })
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <aside className="flex-[1] border-r-2 border-white">
@@ -88,10 +116,10 @@ export default function ChatList() {
                         <Modal.Header>Contacts</Modal.Header>
                         <Modal.Body>
                             <ul className="grid gap-3">
-                                {users.map((user) => (
+                                {users.filter((user) => user.id !== currentUser!.id).map((user) => (
                                     <li key={user.id} className="flex items-center justify-between px-4 py-2 border rounded-lg">
                                         <span className="flex items-center gap-3"><img src="/user-pfp.png" alt="pfp" className="size-[40px]" />{user.username}</span>
-                                        <Button>Start a chat</Button>
+                                        <Button onClick={() => { handleChatAdd(user.id) }}>Start a chat</Button>
                                     </li>
                                 ))}
                             </ul>
@@ -106,8 +134,8 @@ export default function ChatList() {
                 </div>
 
                 <ul className="flex flex-col gap-2 mt-4">
-                    {chats.map((chat: Chat) => (
-                        <li key={chat.chatId} className="flex items-center gap-4 rounded-md px-4 py-2">
+                    {chats.map((chat: userChat, index: number) => (
+                        <Link to='' onClick={() => setCurrentChat(chat[index].chatId)} key={chat[index].chatId} className="flex items-center gap-4 rounded-md px-4 py-2">
                             <figure>
                                 <img src='/user-pfp.png' alt="user-pfp" className="size-[40px] rounded-full" />
                             </figure>
@@ -115,7 +143,7 @@ export default function ChatList() {
                                 <h1>{chat.user.username}</h1>
                                 <p>{chat.lastMessage}</p>
                             </div>
-                        </li>
+                        </Link>
                     ))}
                 </ul>
             </div>

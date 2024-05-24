@@ -21,7 +21,7 @@ export const useUserStore = create<UserState>((set) => ({
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
-                set({ currentUser: docSnap.data(), isLoading: false });
+                set({ currentUser: docSnap.data() as User, isLoading: false });
             } else {
                 set({ currentUser: null, isLoading: false });
             }
@@ -34,9 +34,7 @@ export const useUserStore = create<UserState>((set) => ({
         const querySnapshot = await getDocs(collection(db, "users"));
         const users: User[] = []
         querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.data(), "lskdjflskdfjl")
-          users.push(doc.data())
+          users.push(doc.data() as User)
         });
     
         return users

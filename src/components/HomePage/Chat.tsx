@@ -1,4 +1,4 @@
-import { HiOutlinePaperAirplane, HiPaperAirplane, HiPhoneArrowUpRight } from "react-icons/hi2"
+import { HiOutlinePaperAirplane, HiPhoneArrowUpRight } from "react-icons/hi2"
 import ChatBody from "./ChatBody"
 import { useUserStore } from "../../zustand/userStore"
 

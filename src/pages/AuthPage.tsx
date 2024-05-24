@@ -5,7 +5,7 @@ import Register from "../components/AuthPage/Register"
 import { toast } from 'react-toastify'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import { auth, db } from "../firebase/firebase"
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 
 export default function AuthPage() {
     const [tab, setTab] = useState('login')
@@ -32,6 +32,12 @@ export default function AuthPage() {
 
         const formData = new FormData(e.currentTarget)
         const { email, username, password } = Object.fromEntries(formData)
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("username", "==", username));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+            return toast.warn("Select another username");
+        }
 
         try {
             const res = await createUserWithEmailAndPassword(auth, email as string, password as string)
