@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import Chat from '../components/Chat'
-import ChatList from '../components/ChatList'
-import Details from '../components/Details'
+import Chat from '../components/HomePage/Chat'
+import ChatList from '../components/HomePage/ChatList'
+import Details from '../components/HomePage/Details'
 
 export default function HomePage() {
     const [detailsClicked, setDetailsClicked] = useState(true)

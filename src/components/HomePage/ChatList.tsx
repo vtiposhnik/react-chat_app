@@ -1,12 +1,13 @@
 import { HiLogout } from "react-icons/hi"
-import { testUserProps } from "../util/test"
-import { HiOutlineCog } from "react-icons/hi2"
-import { auth, db } from "../firebase/firebase"
+import { testUserProps } from "../../util/test"
+import { HiOutlineCog, HiOutlineUserPlus } from "react-icons/hi2"
+import { auth, db } from "../../firebase/firebase"
 import { Link } from "react-router-dom"
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react"
-import { useUserStore } from "../zustand/userStore"
-import { User } from "../util/interfaces"
+import { useUserStore } from "../../zustand/userStore"
+import { User } from "../../util/interfaces"
+import { Modal, Button } from "flowbite-react"
 
 interface Chat {
     userId: string,
@@ -17,7 +18,17 @@ interface Chat {
 
 export default function ChatList() {
     const [chats, setChats] = useState<Chat[]>([])
-    const { currentUser } = useUserStore()
+    const [users, setUsers] = useState<User[]>([])
+    const { currentUser, fetchUsers } = useUserStore()
+
+    const [openModal, setOpenModal] = useState(false)
+
+    useEffect(() => {
+        fetchUsers().then((users) => {
+            console.log(users, "CHAT LIST")
+            setUsers(users)
+        })
+    }, [])
 
     useEffect(() => {
         if (currentUser) {
@@ -53,6 +64,8 @@ export default function ChatList() {
         }
     }, [currentUser!.id]);
 
+    console.log(users)
+
     return (
         <aside className="flex-[1] border-r-2 border-white">
             <div className="flex flex-col gap-4">
@@ -66,11 +79,30 @@ export default function ChatList() {
                     <button onClick={() => auth.signOut()}><HiLogout size={25} /></button>
                 </div>
 
-                <div className="flex items-center px-4 py-2 border-b-2 border-white">
+                <div className="flex items-center gap-4 px-4 py-2 border-b-2 border-white">
                     <input type="text" placeholder="Search..." className=" p-2 rounded-lg w-full" />
-                    {/* <i className="p-2 rounded-lg">
-                        <HiOutlineFilter size={25} />
-                    </i> */}
+                    <button className="p-2 rounded-lg" onClick={() => setOpenModal(true)}>
+                        <HiOutlineUserPlus size={30} />
+                    </button>
+                    <Modal show={openModal} onClose={() => setOpenModal(false)}>
+                        <Modal.Header>Contacts</Modal.Header>
+                        <Modal.Body>
+                            <ul className="grid gap-3">
+                                {users.map((user) => (
+                                    <li key={user.id} className="flex items-center justify-between px-4 py-2 border rounded-lg">
+                                        <span className="flex items-center gap-3"><img src="/user-pfp.png" alt="pfp" className="size-[40px]" />{user.username}</span>
+                                        <Button>Start a chat</Button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button onClick={() => setOpenModal(false)}>I accept</Button>
+                            <Button color="gray" onClick={() => setOpenModal(false)}>
+                                Decline
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
 
                 <ul className="flex flex-col gap-2 mt-4">

@@ -1,28 +1,16 @@
 import { HiOutlinePaperAirplane, HiPaperAirplane, HiPhoneArrowUpRight } from "react-icons/hi2"
 import ChatBody from "./ChatBody"
+import { useUserStore } from "../../zustand/userStore"
 
 export default function Chat({ handleClick }: { handleClick: () => void }) {
-    const testMessagesProps = [
-        {
-            userId: '1',
-            message: 'random test message',
-            sentAt: '18:57'
-        }
-    ]
-
-    const testUserProps = [
-        {
-            name: 'John Silver',
-            pfp: '/user-pfp.png'
-        }
-    ]
+    const { currentUser } = useUserStore()
 
     return (
         <section className="chat flex-[3] relative flex flex-col">
             <header className="flex justify-between items-center p-4 border-b-2 border-white ">
                 <a className="flex justify-center items-center gap-2 cursor-pointer" onClick={handleClick}>
-                    <img src={testUserProps[0].pfp} alt="user pfp" className="size-[40px] rounded-full" />
-                    <span>{testUserProps[0].name}</span>
+                    <img src='/user-pfp.png' alt="user pfp" className="size-[40px] rounded-full" />
+                    <span>{currentUser && currentUser.username}</span>
                 </a>
                 <button>
                     <HiPhoneArrowUpRight />

@@ -1,4 +1,4 @@
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { create } from "zustand";
 import { db } from "../firebase/firebase";
 import { User } from "../util/interfaces";
@@ -6,7 +6,8 @@ import { User } from "../util/interfaces";
 interface UserState {
     currentUser: User | null,
     isLoading: boolean,
-    fetchUserInfo: (uid: string) => void
+    fetchUserInfo: (uid: string) => void,
+    fetchUsers: () => Promise<User[]>
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -28,5 +29,16 @@ export const useUserStore = create<UserState>((set) => ({
             console.log(err);
             return set({ currentUser: null, isLoading: false });
         }
+    },
+    fetchUsers: async () => {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        const users: User[] = []
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.data(), "lskdjflskdfjl")
+          users.push(doc.data())
+        });
+    
+        return users
     }
 }));
