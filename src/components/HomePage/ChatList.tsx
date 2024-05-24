@@ -12,10 +12,10 @@ import { userChat } from "../../util/interfaces"
 import { useChatStore } from "../../zustand/chatStore"
 
 export default function ChatList() {
-    const [chats, setChats] = useState<userChat[]>([])
+    const [userChats, setUserChats] = useState<userChat[]>([])
     const [users, setUsers] = useState<User[]>([])
     const { currentUser, fetchUsers } = useUserStore()
-    const { setCurrentChat } = useChatStore()
+    const { setCurrentChatId } = useChatStore()
 
     const [openModal, setOpenModal] = useState(false)
 
@@ -42,8 +42,8 @@ export default function ChatList() {
                         })
                         Promise.all(promises)
                             .then((data) => {
-                                console.log(data)
-                                setChats(data)
+                                console.log(data, "DATA")
+                                setUserChats(data)
                             })
                             .catch((error) => {
                                 console.error("Error while fetching the chats", error)
@@ -73,7 +73,8 @@ export default function ChatList() {
                 chatId: currentUser.id,
                 messages: [],
                 createdAt: serverTimestamp()
-            });
+            }, { merge: true });
+
             await updateDoc(doc(userChatsRef, currentUser.id), {
                 chats: arrayUnion({
                     chatId: newChatRef.id,
@@ -134,8 +135,8 @@ export default function ChatList() {
                 </div>
 
                 <ul className="flex flex-col gap-2 mt-4">
-                    {chats.map((chat: userChat, index: number) => (
-                        <Link to='' onClick={() => setCurrentChat(chat[index].chatId)} key={chat[index].chatId} className="flex items-center gap-4 rounded-md px-4 py-2">
+                    {userChats.map((chat: userChat, index: number) => (
+                        <Link to='' onClick={() => { setCurrentChatId(chat[index].chatId) }} key={chat[index].chatId} className="flex items-center gap-4 rounded-md px-4 py-2">
                             <figure>
                                 <img src='/user-pfp.png' alt="user-pfp" className="size-[40px] rounded-full" />
                             </figure>

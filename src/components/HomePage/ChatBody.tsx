@@ -1,19 +1,44 @@
 import { useEffect, useState } from "react"
 import { useChatStore } from "../../zustand/chatStore"
 import { Chat } from "../../util/interfaces"
+import { useUserStore } from "../../zustand/userStore"
+import { onSnapshot, doc } from "firebase/firestore"
+import { db } from "../../firebase/firebase"
+
+interface Message {
+    userId: string,
+    msg: string
+}
 
 export default function ChatBody() {
     const [chat, setChat] = useState<Chat | null>(null)
-    const {currentChat} = useChatStore()
-    
+    const { currentChatId } = useChatStore()
+    const { currentUser } = useUserStore()
+
     useEffect(() => {
-        console.log(currentChat)
-        setChat(currentChat)
-    }, [])
+        console.log(currentChatId);
+        const unsub = onSnapshot(doc(db, "chats", currentChatId), (doc) => {
+            setChat(doc.data())
+            console.log(doc.data(), "THIS IS chats DATA");
+        })
+        return () => {
+            unsub();
+        };
+    }, [currentChatId])
 
     return (
-        <section>
-            {currentChat ? <div>{currentChat.chatId}</div> : <div>loading...</div>}
+        <section className="p-4">
+            {chat ?
+                <div>
+                    {chat?.messages.map((message: Message) => (
+                        <div className={`${currentUser!.id === chat.chatId ? 'flex' : 'flex flex-end'}`}>
+                            {message.msg}
+                        </div>
+                    ))}
+                </div>
+                : <div>loading...</div>}
+
+
 
             {/* <div className="center">
                 {chat?.messages?.map((message) => (
