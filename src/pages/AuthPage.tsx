@@ -6,10 +6,13 @@ import { toast } from 'react-toastify'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import { auth, db } from "../firebase/firebase"
 import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
+import '../index.css'
 
 export default function AuthPage() {
     const [tab, setTab] = useState('login')
     const path = useLocation()
+    const [downloadURL, setDownloadURL] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false)
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -29,6 +32,7 @@ export default function AuthPage() {
 
     const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setLoading(true)
 
         const formData = new FormData(e.currentTarget)
         const { email, username, password } = Object.fromEntries(formData)
@@ -40,11 +44,13 @@ export default function AuthPage() {
         }
 
         try {
+            if (!downloadURL) setTimeout(() => console.log("Timeout for 5 seconds"), 5000)
             const res = await createUserWithEmailAndPassword(auth, email as string, password as string)
 
             await setDoc(doc(db, "users", res.user.uid), { //cities/LA
                 username,
                 email,
+                pfp: downloadURL,
                 id: res.user.uid
             });
             await setDoc(doc(db, "userChats", res.user.uid), {
@@ -55,6 +61,8 @@ export default function AuthPage() {
         } catch (error: unknown) {
             console.log(error)
             toast.error((error as Error).message)
+        } finally {
+            if (downloadURL) {setLoading(false)}
         }
     }
 
@@ -66,5 +74,5 @@ export default function AuthPage() {
         }
     }, [path.search])
 
-    return tab === 'login' ? <Login submitHandler={handleLogin} /> : <Register submitHandler={handleRegister} />
+    return tab === 'login' ? <Login loading={loading} submitHandler={handleLogin} /> : <Register loading={loading} setUrl={setDownloadURL} submitHandler={handleRegister} />
 }

@@ -1,13 +1,17 @@
 export interface User {
     id: string,
     username: string,
-    email: string
+    email: string,
+    pfp: string
 }
 export interface userChat {
     chatId: string,
     lastMessage: string,
-    partnerId: string,
-    user: User
+    recipientId: string,
+}
+export interface userChatExtended {
+    0: userChat,
+    user: User | null
 }
 export interface Chat {
     chatId: string,

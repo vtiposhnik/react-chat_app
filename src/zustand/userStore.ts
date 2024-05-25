@@ -7,7 +7,8 @@ interface UserState {
     currentUser: User | null,
     isLoading: boolean,
     fetchUserInfo: (uid: string) => void,
-    fetchUsers: () => Promise<User[]>
+    fetchUsers: () => Promise<User[]>,
+    getUserById: (uid: string) => Promise<User | void>
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -34,9 +35,21 @@ export const useUserStore = create<UserState>((set) => ({
         const querySnapshot = await getDocs(collection(db, "users"));
         const users: User[] = []
         querySnapshot.forEach((doc) => {
-          users.push(doc.data() as User)
+            users.push(doc.data() as User)
         });
-    
+
         return users
+    },
+    getUserById: async (uid: string) => {
+        try {
+            const docRef = doc(db, "users", uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                return docSnap.data() as User
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
 }));
