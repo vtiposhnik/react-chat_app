@@ -4,13 +4,14 @@ import { Chat } from "../../util/interfaces"
 import { useUserStore } from "../../zustand/userStore"
 import { onSnapshot, doc } from "firebase/firestore"
 import { db } from "../../firebase/firebase"
+import { userChat } from "../../util/interfaces"
 
 interface Message {
     userId: string,
     msg: string
 }
 
-export default function ChatBody() {
+export default function ChatBody({ userChat }: { userChat: [userChat] | undefined }) {
     const [chat, setChat] = useState<Chat | null>(null)
     const { currentChatId } = useChatStore()
     const { currentUser } = useUserStore()
@@ -18,8 +19,9 @@ export default function ChatBody() {
     useEffect(() => {
         console.log(currentChatId);
         const unsub = onSnapshot(doc(db, "chats", currentChatId), (doc) => {
-            setChat(doc.data())
-            console.log(doc.data(), "THIS IS chats DATA");
+            if (doc.exists()) {
+                setChat(doc.data() as Chat)
+            }
         })
         return () => {
             unsub();
@@ -29,9 +31,9 @@ export default function ChatBody() {
     return (
         <section className="p-4">
             {chat ?
-                <div>
+                <div className="flex flex-col gap-3">
                     {chat?.messages.map((message: Message) => (
-                        <div className={`${currentUser!.id === chat.chatId ? 'flex' : 'flex flex-end'}`}>
+                        <div className={`${currentUser!.id === message.userId ? 'self-end' : ''} w-fit border px-4 py-2 rounded-lg bg-white`}>
                             {message.msg}
                         </div>
                     ))}
