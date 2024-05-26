@@ -2,7 +2,6 @@ import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { create } from "zustand";
 import { db } from "../firebase/firebase";
 import { User } from "../util/interfaces";
-import { mockUser } from "../util/mockData";
 
 interface UserState {
     currentUser: User | null,

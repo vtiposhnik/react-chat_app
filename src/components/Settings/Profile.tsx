@@ -10,15 +10,15 @@ export default function Profile() {
                     </label>
                 </Tooltip>
                 <input id="image" className="hidden" type="file" />
-                <label htmlFor="">Your Full Name: </label>
+                <label htmlFor="">Ваше полное имя: </label>
                 <input type="text" />
-                <label htmlFor="">Bio: </label>
+                <label htmlFor="">О себе: </label>
                 <input type="text" />
-                <label htmlFor="">Phone Number: </label>
+                <label htmlFor="">Номер телефона: </label>
                 <input type="text" />
             </form>
             <Button>
-                Sign Out
+                Выйти из аккаунта
             </Button>
         </section>
     )

@@ -60,7 +60,7 @@ export default function Register({ loading, setUrl, submitHandler }: { loading: 
                 <div className="flex flex-col items-center">
                     <label htmlFor="file" className="cursor-pointer relative">
                         <img src={`${img.url || '/user-pfp.png'}`} alt="upload an image" className="size-[100px] mx-auto rounded-full object-cover border-2 border-slate-600" />
-                        Upload your profile image
+                        Загрузи изображение профиля
                     </label>
                     <input
                         type="file"
@@ -70,12 +70,12 @@ export default function Register({ loading, setUrl, submitHandler }: { loading: 
                     />
                 </div>
 
-                <label htmlFor="username">Email:</label>
-                <input name="email" id="username" type="text" className="w-full p-2 rounded-lg" placeholder="Your email..." />
-                <label htmlFor="username">Username</label>
-                <input name="username" id="username" type="text" className="w-full p-2 rounded-lg" placeholder="Your username..." />
-                <label htmlFor="password">Password</label>
-                <input name="password" id="password" type="text" className="w-full p-2 rounded-lg" placeholder="Your password..." />
+                <label htmlFor="username">Электронная почта:</label>
+                <input name="email" id="username" type="text" className="w-full p-2 rounded-lg" placeholder="Ваша почта..." />
+                <label htmlFor="username">Имя пользователя</label>
+                <input name="username" id="username" type="text" className="w-full p-2 rounded-lg" placeholder="Имя пользователя..." />
+                <label htmlFor="password">Пароль</label>
+                <input name="password" id="password" type="text" className="w-full p-2 rounded-lg" placeholder=" Ваш пароль..." />
                 <Button
                     gradientDuoTone='purpleToPink'
                     type='submit'
@@ -86,13 +86,13 @@ export default function Register({ loading, setUrl, submitHandler }: { loading: 
                     {loading ? (
                         <>
                             <Spinner size='sm' />
-                            <span className='pl-3'>Loading...</span>
+                            <span className='pl-3'>Загрузка...</span>
                         </>
                     ) : (
-                        'Sign In'
+                        'Регистрация'
                     )}
                 </Button>
-                <span>Already have an account? <Link to='/?tab=login'>Sign In</Link></span>
+                <span>Уже авторизованы? <Link to='/?tab=login'>Войти</Link></span>
             </form>
         </section>
 

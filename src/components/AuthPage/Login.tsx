@@ -5,11 +5,11 @@ export default function Login({ loading, submitHandler }: { loading: boolean, su
     return (
         <section className="h-[90vh] w-[90vw] p-4 rounded-lg bg-slate-200 text-center">
             <form className="lg:w-[40%] p-8 mx-auto flex flex-col gap-4 border-gray-600 border rounded-lg" onSubmit={submitHandler}>
-                <label htmlFor="username">Phone Number:</label>
-                <input name="email" type="text" className="w-full p-2 rounded-lg" placeholder="Your email..." />
+                <label htmlFor="username">Электронная почта:</label>
+                <input name="email" type="text" className="w-full p-2 rounded-lg" placeholder="Ваша почта..." />
 
-                <label htmlFor="password">Password:</label>
-                <input name="password" type="text" className="w-full p-2 rounded-lg" placeholder="Your password..." />
+                <label htmlFor="password">Пароль:</label>
+                <input name="password" type="text" className="w-full p-2 rounded-lg" placeholder="Ваш пароль..." />
 
                 <Button
                     gradientDuoTone='purpleToPink'
@@ -19,13 +19,13 @@ export default function Login({ loading, submitHandler }: { loading: boolean, su
                     {loading ? (
                         <>
                             <Spinner size='sm' />
-                            <span className='pl-3'>Loading...</span>
+                            <span className='pl-3'>Загрузка...</span>
                         </>
                     ) : (
-                        'Sign In'
+                        'Войти'
                     )}
                 </Button>
-                <span>No account yet? <Link to='/?tab=register'>Sign Up</Link></span>
+                <span>Не авторизованы? <Link to='/?tab=register'>Создайте аккаунт</Link></span>
             </form>
         </section>
     )

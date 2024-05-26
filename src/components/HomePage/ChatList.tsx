@@ -6,7 +6,7 @@ import { arrayUnion, collection, doc, getDoc, onSnapshot, serverTimestamp, setDo
 import { useEffect, useState } from "react"
 import { useUserStore } from "../../zustand/userStore"
 import { User, userChatExtended } from "../../util/interfaces"
-import { Modal, Button } from "flowbite-react"
+import { Modal, Button, Tooltip } from "flowbite-react"
 import { userChat } from "../../util/interfaces"
 import { useChatStore } from "../../zustand/chatStore"
 
@@ -23,6 +23,7 @@ export default function ChatList() {
             setUsers(users)
         })
     }, [])
+
 
     useEffect(() => {
         if (currentUser) {
@@ -68,6 +69,16 @@ export default function ChatList() {
         const chatRef = collection(db, 'chats')
         const userChatsRef = collection(db, 'userChats')
 
+        const userChatDocSnap = (await getDoc(doc(userChatsRef, currentUser?.id)))
+        if (userChatDocSnap.exists()) {
+            const userChats: userChat[] = userChatDocSnap.data().chats
+            userChats.map((chat) => {
+                if (chat.recipientId === userId) {
+                    return
+                }
+            })
+        }
+
         if (!currentUser) return
 
         try {
@@ -105,38 +116,38 @@ export default function ChatList() {
 
                 <div className="flex items-center justify-between p-4">
                     <div className="flex items-center gap-3">
-                        <img src={currentUser!.pfp} alt="user-pfp" className="size-[40px] rounded-full" />
+                        <img src={currentUser!.pfp} alt="user-pfp" className="size-[40px] object-cover rounded-full" />
                         <span>{currentUser?.username}</span>
                     </div>
                     <div className="flex gap-2">
-                        <Link to='/settings'><HiOutlineCog size={25} /></Link>
-                        <button onClick={() => auth.signOut()}><HiOutlineLogout size={25} /></button>
+                        <Tooltip content="Настройки">
+                            <Link to='/settings'><HiOutlineCog size={25} /></Link>
+                        </Tooltip>
+                        <Tooltip content='Выйти из аккаунта'>
+                            <button onClick={() => auth.signOut()}><HiOutlineLogout size={25} /></button>
+                        </Tooltip>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-4 px-4 py-2 border-b-2 border-white">
-                    <input type="text" placeholder="Search..." className=" p-2 rounded-lg w-full" />
-                    <button className="p-2 rounded-lg" onClick={() => setOpenModal(true)}>
-                        <HiOutlineUserPlus size={30} />
-                    </button>
+                    <input type="text" placeholder="Искать чат..." className=" p-2 rounded-lg w-full" />
+                    <Tooltip content='Добавить чат'>
+                        <button className="p-2 rounded-lg" onClick={() => setOpenModal(true)}>
+                            <HiOutlineUserPlus size={30} />
+                        </button>
+                    </Tooltip>
                     <Modal show={openModal} onClose={() => setOpenModal(false)}>
-                        <Modal.Header>Contacts</Modal.Header>
+                        <Modal.Header>Контакты</Modal.Header>
                         <Modal.Body>
                             <ul className="grid gap-3">
                                 {users.filter((user) => user.id !== currentUser!.id).map((user) => (
                                     <li key={user.id} className="flex items-center justify-between px-4 py-2 border rounded-lg">
-                                        <span className="flex items-center gap-3"><img src="/user-pfp.png" alt="pfp" className="size-[40px]" />{user.username}</span>
-                                        <Button onClick={() => { handleChatAdd(user.id) }}>Start a chat</Button>
+                                        <span className="flex items-center gap-3"><img src={`${user.pfp || '/user-pfp.png'}`} alt="pfp" className="size-[40px] object-cover rounded-full" />{user.username}</span>
+                                        <Button gradientDuoTone='purpleToPink' onClick={() => { handleChatAdd(user.id) }}>Начать переписку</Button>
                                     </li>
                                 ))}
                             </ul>
                         </Modal.Body>
-                        <Modal.Footer>
-                            <Button onClick={() => setOpenModal(false)}>I accept</Button>
-                            <Button color="gray" onClick={() => setOpenModal(false)}>
-                                Decline
-                            </Button>
-                        </Modal.Footer>
                     </Modal>
                 </div>
 
@@ -144,7 +155,7 @@ export default function ChatList() {
                     {userChats.map((chat: userChatExtended) => (
                         <Link to='' onClick={() => { setCurrentChatId(chat[0].chatId) }} key={chat[0].chatId} className="flex items-center gap-4 rounded-md px-4 py-2">
                             <figure>
-                                <img src='/user-pfp.png' alt="user-pfp" className="size-[40px] rounded-full" />
+                                <img src={`${chat.user?.pfp || '/user-pfp.png'}`} alt="user-pfp" className="size-[40px] object-cover rounded-full" />
                             </figure>
                             <div className=" gap-4">
                                 <h1>{chat.user!.username}</h1>

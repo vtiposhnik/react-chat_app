@@ -9,22 +9,22 @@ export default function SettingsSidebar({tab}: {tab: string}) {
                 <Sidebar.ItemGroup>
                     <Link to='/settings?tab=profile'>
                         <Sidebar.Item icon={HiUserCircle} as='div' active={tab === 'profile'}>
-                            Profile
+                            Профиль
                         </Sidebar.Item>
                     </Link>
                     <Link to='/settings?tab=chats'>
                         <Sidebar.Item href="#" icon={HiChatBubbleBottomCenter} as='div' label="Pro" labelColor="dark" active={tab === 'chats'}>
-                            Chats
+                            Чаты
                         </Sidebar.Item>
                     </Link>
                     <Link to='/settings?tab=inbox'>
                         <Sidebar.Item href="#" icon={HiInbox} as='div' label="3" active={tab === 'inbox'}>
-                            Inbox
+                            Личное
                         </Sidebar.Item>
                     </Link>
                     <Link to='/settings?tab=contacts'>
                         <Sidebar.Item href="#" icon={HiUser} as='div' active={tab === 'contacts'}>
-                            Contacts
+                            Контакты
                         </Sidebar.Item>
                     </Link>
                 </Sidebar.ItemGroup>

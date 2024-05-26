@@ -16,6 +16,7 @@ export default function AuthPage() {
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setLoading(true)
 
         const formData = new FormData(e.currentTarget)
         const { email, password } = Object.fromEntries(formData)
@@ -27,6 +28,8 @@ export default function AuthPage() {
         } catch (error: unknown) {
             console.log(error)
             toast.error((error as Error).message)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -62,7 +65,7 @@ export default function AuthPage() {
             console.log(error)
             toast.error((error as Error).message)
         } finally {
-            if (downloadURL) {setLoading(false)}
+            if (downloadURL) { setLoading(false) }
         }
     }
 
@@ -74,5 +77,7 @@ export default function AuthPage() {
         }
     }, [path.search])
 
-    return tab === 'login' ? <Login loading={loading} submitHandler={handleLogin} /> : <Register loading={loading} setUrl={setDownloadURL} submitHandler={handleRegister} />
+    return tab === 'login' ?
+        <Login loading={loading} submitHandler={handleLogin} />
+        : <Register loading={loading} setUrl={setDownloadURL} submitHandler={handleRegister} />
 }

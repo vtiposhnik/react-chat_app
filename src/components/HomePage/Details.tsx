@@ -13,20 +13,20 @@ export default function Details({ clicked }: { clicked: boolean }) {
                     <span className="text-lg">~{recipientUser && recipientUser.username}</span>
                 </figure>
                 <div className="px-2 py-4">
-                    <span>Last Seen: {date.toDateString()}</span>
+                    <span>Был в сети: {date.toDateString()}</span>
                 </div>
             </div>
             <div className="px-2 mt-2">
                 <Accordion>
                     <Accordion.Panel>
-                        <Accordion.Title> Shared Media</Accordion.Title>
+                        <Accordion.Title> Медиа</Accordion.Title>
                         <Accordion.Content>
                             <p>
                             </p>
                         </Accordion.Content>
                     </Accordion.Panel>
                     <Accordion.Panel>
-                        <Accordion.Title> Shared Files</Accordion.Title>
+                        <Accordion.Title> Документы</Accordion.Title>
                         <Accordion.Content>
                             <p>
 
@@ -34,7 +34,7 @@ export default function Details({ clicked }: { clicked: boolean }) {
                         </Accordion.Content>
                     </Accordion.Panel>
                     <Accordion.Panel>
-                        <Accordion.Title> Shared Links</Accordion.Title>
+                        <Accordion.Title> Ссылки</Accordion.Title>
                         <Accordion.Content>
                             <p>
 
