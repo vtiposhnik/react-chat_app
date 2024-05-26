@@ -4,10 +4,10 @@ import { db } from "../firebase/firebase";
 import { userChat } from "../util/interfaces";
 
 interface ChatState {
-    usersChats: [userChat] | null,
+    usersChats: userChat[] | null,
     currentChatId: string,
     isLoading: boolean,
-    getUsersChats: (userId: string) => Promise<[userChat] | undefined>
+    getUsersChats: (userId: string) => Promise<userChat[] | undefined>
     setCurrentChatId: (chatId: string) => void
 }
 
@@ -21,7 +21,7 @@ export const useChatStore = create<ChatState>((set) => ({
         if (userDocSnap.exists()) {
             const user = userDocSnap.data()
             set({ usersChats: user.chats })
-            return user.chats as [userChat]
+            return user.chats as userChat[]
         }
     },
     setCurrentChatId: (chatId: string) => set({ currentChatId: chatId })

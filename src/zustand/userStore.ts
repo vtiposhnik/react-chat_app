@@ -2,18 +2,27 @@ import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { create } from "zustand";
 import { db } from "../firebase/firebase";
 import { User } from "../util/interfaces";
+import { mockUser } from "../util/mockData";
 
 interface UserState {
     currentUser: User | null,
+    recipientUser: User | null,
     isLoading: boolean,
+    setRecipientUser: (user: User | undefined) => void,
     fetchUserInfo: (uid: string) => void,
     fetchUsers: () => Promise<User[]>,
-    getUserById: (uid: string) => Promise<User | void>
+    getUserById: (uid: string) => Promise<User | undefined>
 }
 
 export const useUserStore = create<UserState>((set) => ({
     currentUser: null,
+    recipientUser: null,
     isLoading: true,
+    setRecipientUser: (user) => {
+        if (user) {
+            set({ recipientUser: user })
+        }
+    },
     fetchUserInfo: async (uid: string) => {
         if (!uid) return set({ currentUser: null, isLoading: false });
 
@@ -46,7 +55,10 @@ export const useUserStore = create<UserState>((set) => ({
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
+                console.log(docSnap.data(), "USER");
                 return docSnap.data() as User
+            } else {
+                throw new Error("User not found, it happened in your store!")
             }
         } catch (err) {
             console.log(err);
