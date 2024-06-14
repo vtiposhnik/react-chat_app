@@ -1,30 +1,38 @@
-# React + TypeScript + Vite
+It needs a lot of working yet...
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Web Messenger
 
-Currently, two official plugins are available:
+## Table of Contents
+- [Introduction](#introduction)
+- [Technologies Used](#technologies-used)
+- [Layout Design](#layout)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Introduction
+Web Messenger Application.
 
-## Expanding the ESLint configuration
+## Features
+- User authentication and authorization
+- Real-time messaging using Firebase
+- Blog platform for creating and publishing posts
+- Responsive design for desktop and mobile devices
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technologies Used
+- **Frontend**: React, TypeScript, Tailwind CSS with Flowbite-UI
+- **Backend**: Express.js, Node.js, TypeScript
+- **Database**: FirestoreDB
+- **Real-time Data**: Firebase
+- **Others**: Axios, bcrypt, dotenv, react-hook-form
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Layout Design
+  ![Chat_Page](https://github.com/vtiposhnik/react-chat_app/assets/99889690/f6c095bd-3057-4225-b8c8-02cf2873721e)
+  ***
+  ***
+  ***
+  ![Auth_Page](https://github.com/vtiposhnik/react-chat_app/assets/99889690/16368fe0-e1f6-4749-bd58-b398cba3a590)
+  ***
+  ***
+  ***
+  ![Settings_Page](https://github.com/vtiposhnik/react-chat_app/assets/99889690/3bd034f3-2c9f-4da6-9fc3-b9978290ede3)
+  ***
+  ***
+  ***
