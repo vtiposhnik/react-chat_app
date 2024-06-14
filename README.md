@@ -21,7 +21,7 @@ Web Messenger Application.
 - **Backend**: Express.js, Node.js, TypeScript
 - **Database**: FirestoreDB
 - **Real-time Data**: Firebase
-- **Others**: Axios, bcrypt, dotenv, react-hook-form
+- **Others**: Axios, bcrypt, dotenv, react-hook-form, Zustand
 
 ## Layout Design
   ![Chat_Page](https://github.com/vtiposhnik/react-chat_app/assets/99889690/f6c095bd-3057-4225-b8c8-02cf2873721e)
